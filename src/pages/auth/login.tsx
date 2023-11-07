@@ -54,7 +54,7 @@ const Login: FunctionComponent<LoginProps> = () => {
           <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }}>
             <TextField
               {...register("email", {
-                required: "Email is required",
+                required: "Email is required",                
               })}
               error={!!errors.email}
               helperText={errors.email?.message}
@@ -88,7 +88,8 @@ const Login: FunctionComponent<LoginProps> = () => {
 
             <TextField
               {...register("password", {
-                required: "Password is required"
+                required: "Password is required",
+                minLength : 8
               })}
               error={!!errors.password}
               helperText={errors.password?.message}

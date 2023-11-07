@@ -12,6 +12,13 @@ export namespace IEntity {
     password : string
   }
 
+  export interface RegisterValues{
+    name : string,
+    email : string,
+    key : string,
+    secret : string,
+  }
+
   export interface UserKey {
     key: string;
   }
