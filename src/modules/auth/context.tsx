@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import { IContext, IEntity } from "./types";
-import { clearSession } from "../../utils";
 
 const AuthContext = createContext<IContext.AuthContextType | undefined>(undefined);
 
@@ -21,7 +20,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [userInformation, setUserInformation] = useState<IEntity.User | null>(null);
 
   useEffect(() => {
-    const savedUser = localStorage.getItem("key");
+    const savedUser = localStorage.getItem("user");
     if (savedUser) {
       setUser(JSON.parse(savedUser));
     }
@@ -29,12 +28,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   function auth(userCredentials: IEntity.User) {
     setUser(userCredentials);
-    localStorage.setItem("key", JSON.stringify(userCredentials));
+    localStorage.setItem("user", JSON.stringify(userCredentials));
   }
 
   function logout() {
+    localStorage.removeItem("user");
     setUser(null);
-    clearSession();
   }
 
   function setUserData(userData: IEntity.User) {

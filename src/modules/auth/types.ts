@@ -7,21 +7,18 @@ export namespace IEntity {
     secret: string
   }
 
-  export interface LoginValues{
-    email : string,
-    password : string
+  export interface LoginValues {
+    email: string,
+    password: string
   }
 
-  export interface RegisterValues{
-    name : string,
-    email : string,
-    key : string,
-    secret : string,
+  export interface RegisterValues {
+    name: string,
+    email: string,
+    key: string,
+    secret: string,
   }
 
-  export interface UserKey {
-    key: string;
-  }
 }
 
 export namespace IContext {

@@ -13,15 +13,15 @@ const AppRoutes: FunctionComponent = () => {
       <ToastContainer position="top-right" autoClose={5000} />
 
       <Routes>
-        <Route path="/" element={<Protected allow={user} navigate="/auth/login" />}>
+        <Route path="/" element={<Protected allow={user} navigate="/auth/register" />}>
           <Route index element={<Home />} />
         </Route>
 
-        <Route path="auth" element={<Protected allow={!user} navigate="/home" />}>
-          <Route index element={<Navigate to="login" />} />
+        <Route path="auth" element={<Protected allow={!user} navigate="/" />}>
+          <Route index element={<Navigate to="register" />} />
           <Route path="login" element={<Auth.Login />} />
           <Route path="register" element={<Auth.Register />} />
-          <Route path="*" index element={<Navigate to="login" />} />
+          <Route path="*" index element={<Navigate to="register" />} />
         </Route>
 
         <Route path="*" element={<Page404 />} />

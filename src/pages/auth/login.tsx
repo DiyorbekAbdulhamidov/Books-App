@@ -11,7 +11,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { IEntity } from '../../modules/auth/types';
 
-interface LoginProps { }
+interface LoginProps {}
 
 const defaultTheme = createTheme();
 

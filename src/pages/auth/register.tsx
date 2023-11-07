@@ -13,7 +13,7 @@ import axios from 'axios';
 import { IEntity } from '../../modules/auth/types';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../modules/auth/context';
-import { alert, setSession } from '../../utils';
+import { alert } from '../../utils';
 
 interface RegisterProps { }
 
@@ -22,6 +22,7 @@ const defaultTheme = createTheme();
 const Register: FunctionComponent<RegisterProps> = () => {
   const { auth } = useAuth();
   const navigate = useNavigate();
+  const [loading, setLoading] = React.useState(false);
 
   const form = useForm<IEntity.RegisterValues>({
     defaultValues: {
@@ -35,6 +36,7 @@ const Register: FunctionComponent<RegisterProps> = () => {
   const { errors } = formState;
 
   const onSubmit = async (data: IEntity.RegisterValues) => {
+    setLoading(true);
     try {
       const allData = {
         name: data.name,
@@ -46,16 +48,17 @@ const Register: FunctionComponent<RegisterProps> = () => {
       const response = await axios.post('https://0001.uz/signup', allData);
 
       if (response.status === 200) {
-        console.log('Yangi foydalanuvchi muvaffaqiyatli yaratildi', response.data);
-        auth(response.data.data.key);
-        setSession(response.data.data.key);
+        auth(response.data.data);
+        setLoading(false);
         navigate("/");
       }
       else {
+        setLoading(false);
         alert.error('An error occurred')
       }
     }
     catch (error: any) {
+      setLoading(false);
       alert.error(error.response.data.message)
     }
   };
@@ -221,8 +224,9 @@ const Register: FunctionComponent<RegisterProps> = () => {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2, bgcolor: '#6200EE' }}
+              disabled={loading}
             >
-              Sign Up
+              {loading ? 'Signing Up...' : 'Sign Up'}
             </Button>
             <Grid container justifyContent='center'>
               <Grid item>
