@@ -1,6 +1,5 @@
-import { notifications } from '@mantine/notifications'
 import axios, { AxiosResponse } from 'axios'
-import { getSession } from '../utils';
+import { alert, getSession } from '../utils';
 
 export { AxiosError } from 'axios'
 
@@ -27,7 +26,7 @@ http.interceptors.response.use(null, err => {
 
   const { data } = response || {}
 
-  if (data?.detail) notifications.show({ message: data?.detail, color: 'red' })
+  if (data?.detail) alert.error(data?.detail)
 
   return Promise.reject(response)
 })

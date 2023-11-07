@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { Route, Routes, Navigate, BrowserRouter } from "react-router-dom";
-import { Auth, Page404, } from "../pages";
+import { Auth, Home, Page404, } from "../pages";
 import { ToastContainer } from "react-toastify";
 import { useAuth } from "../modules/auth/context";
 import Protected from "./protected";
@@ -11,8 +11,9 @@ const AppRoutes: FunctionComponent = () => {
   return (
     <BrowserRouter>
       <ToastContainer position="top-right" autoClose={5000} />
+
       <Routes>
-        <Route path="/home" element={<Protected allow={user} navigate="/auth/login" />}>
+        <Route path="/" element={<Protected allow={user} navigate="/auth/login" />}>
           <Route index element={<Home />} />
         </Route>
 
