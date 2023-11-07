@@ -1,4 +1,4 @@
-import { FunctionComponent } from "react";
+import React, { FunctionComponent, useState } from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -8,21 +8,39 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import * as yup from 'yup';
+import { alert } from '../../utils';
 
 interface LoginProps { }
 
 const defaultTheme = createTheme();
 
-const Login: FunctionComponent<LoginProps> = () => {
+const validationSchema = yup.object().shape({
+  email: yup.string().email('Invalid email').required().label('Email'),
+  password: yup.string().required().length(8).label('Password'),
+});
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+const Login: FunctionComponent<LoginProps> = () => {
+  const [errorMessage, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const formData = {
       email: data.get('email'),
       password: data.get('password'),
-    });
-  };
+    };
+    try {
+      await validationSchema.validate(formData, { abortEarly: false });
+    }
+    catch (error: any) {
+      if (error instanceof yup.ValidationError) {
+        const errorMessage = error.inner.map((err) => err.message).join(" ");
+        setError(errorMessage)
+        alert.error(errorMessage);
+      }
+    }
+  }
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -57,8 +75,28 @@ const Login: FunctionComponent<LoginProps> = () => {
               autoComplete="email"
               size="small"
               autoFocus
+              error={!!errorMessage} 
+              InputLabelProps={{
+                sx: {
+                  color: 'var(--foundation-grey-grey-900, #151515)',
+                  fontFeatureSettings: "'clig' off, 'liga' off",
+                  fontFamily: 'Mulish',
+                  fontSize: '16px',
+                  fontStyle: 'normal',
+                  fontWeight: 400,
+                  lineHeight: '120%',
+                },
+              }}
+              sx={{
+                borderRadius: '6px',
+                border: '1px solid #EBEBEB',
+                background: '#FEFEFE',
+                boxShadow: '0px 4px 18px 0px rgba(51, 51, 51, 0.04)',
+              }}
             />
+
             <TextField
+              error={!!errorMessage}
               size="small"
               margin="dense"
               required
@@ -68,7 +106,23 @@ const Login: FunctionComponent<LoginProps> = () => {
               type="password"
               id="password"
               autoComplete="current-password"
-              sx={{ fontSize: '16px', }}
+              InputLabelProps={{
+                sx: {
+                  color: 'var(--foundation-grey-grey-900, #151515)',
+                  fontFeatureSettings: "'clig' off, 'liga' off",
+                  fontFamily: 'Mulish',
+                  fontSize: '16px',
+                  fontStyle: 'normal',
+                  fontWeight: 400,
+                  lineHeight: '120%',
+                },
+              }}
+              sx={{
+                borderRadius: '6px',
+                border: '1px solid #EBEBEB',
+                background: '#FEFEFE',
+                boxShadow: '0px 4px 18px 0px rgba(51, 51, 51, 0.04)',
+              }}
             />
 
             <Button
