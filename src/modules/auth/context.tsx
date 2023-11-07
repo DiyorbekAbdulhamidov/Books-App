@@ -27,9 +27,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }, []);
 
-  function login(userCredentials: IEntity.User) {
+  function auth(userCredentials: IEntity.User) {
     setUser(userCredentials);
-    localStorage.setItem("access_token", JSON.stringify(userCredentials));
+    localStorage.setItem("key", JSON.stringify(userCredentials));
   }
 
   function logout() {
@@ -43,7 +43,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const value: IContext.AuthContextType = {
     user,
-    login,
+    auth,
     logout,
     userData: userInformation,
     setUserData,

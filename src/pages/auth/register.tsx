@@ -9,13 +9,19 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import axios from 'axios';
 import { IEntity } from '../../modules/auth/types';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../modules/auth/context';
+import { alert, setSession } from '../../utils';
 
 interface RegisterProps { }
 
 const defaultTheme = createTheme();
 
 const Register: FunctionComponent<RegisterProps> = () => {
+  const { auth } = useAuth();
+  const navigate = useNavigate();
 
   const form = useForm<IEntity.RegisterValues>({
     defaultValues: {
@@ -27,8 +33,31 @@ const Register: FunctionComponent<RegisterProps> = () => {
   });
   const { register, handleSubmit, formState } = form;
   const { errors } = formState;
-  const onSubmit = (data: IEntity.RegisterValues) => {
-    console.log(data);
+
+  const onSubmit = async (data: IEntity.RegisterValues) => {
+    try {
+      const allData = {
+        name: data.name,
+        email: data.email,
+        key: data.key,
+        secret: data.secret,
+      };
+
+      const response = await axios.post('https://0001.uz/signup', allData);
+
+      if (response.status === 200) {
+        console.log('Yangi foydalanuvchi muvaffaqiyatli yaratildi', response.data);
+        auth(response.data.data.key);
+        setSession(response.data.data.key);
+        navigate("/");
+      }
+      else {
+        alert.error('An error occurred')
+      }
+    }
+    catch (error: any) {
+      alert.error(error.response.data.message)
+    }
   };
 
   return (

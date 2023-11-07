@@ -27,7 +27,7 @@ export namespace IEntity {
 export namespace IContext {
   export interface AuthContextType {
     user: IEntity.User | null;
-    login: (user: IEntity.User) => void;
+    auth: (user: IEntity.User) => void;
     logout: () => void;
     userData: IEntity.User | null;
     setUserData: (userData: IEntity.User) => void;
