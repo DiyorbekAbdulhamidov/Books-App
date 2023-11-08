@@ -10,23 +10,30 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { IEntity } from '../../modules/auth/types';
+import { useAuth } from '../../modules/auth/context';
+import { useNavigate } from 'react-router-dom';
+import { alert } from '../../utils';
 
 interface LoginProps {}
 
 const defaultTheme = createTheme();
 
 const Login: FunctionComponent<LoginProps> = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const form = useForm<IEntity.LoginValues>({
     defaultValues: {
-      email: "",
-      password: "",
+      key: "",
+      secret: "",
     },
   });
   const { register, handleSubmit, formState } = form;
   const { errors} = formState;
   const onSubmit = (data: IEntity.LoginValues) => {
-    console.log(data);
+    
+    if(data.key === user?.key && data.secret === user.secret) navigate('/');
+    alert.error('Incorrect key or secret');
   };
 
   return (
@@ -53,18 +60,18 @@ const Login: FunctionComponent<LoginProps> = () => {
 
           <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }}>
             <TextField
-              {...register("email", {
-                required: "Email is required",                
+              {...register("key", {
+                required: "Key is required",                
               })}
-              error={!!errors.email}
-              helperText={errors.email?.message}
+              error={!!errors.key}
+              helperText={errors.key?.message}
               margin="dense"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="key"
+              label="Key"
+              name="key"
+              autoComplete="key"
               size="small"
               autoFocus
               InputLabelProps={{
@@ -87,21 +94,19 @@ const Login: FunctionComponent<LoginProps> = () => {
             />
 
             <TextField
-              {...register("password", {
-                required: "Password is required",
-                minLength : 8
+              {...register("secret", {
+                required: "Secret is required",
               })}
-              error={!!errors.password}
-              helperText={errors.password?.message}
+              error={!!errors.secret}
+              helperText={errors.secret?.message}
               size="small"
               margin="dense"
               required
               fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
+              name="secret"
+              label="Secret"
+              type="secret"
+              id="secret"
               InputLabelProps={{
                 sx: {
                   color: 'var(--foundation-grey-grey-900, #151515)',

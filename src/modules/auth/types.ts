@@ -8,8 +8,8 @@ export namespace IEntity {
   }
 
   export interface LoginValues {
-    email: string,
-    password: string
+    key: string,
+    secret: string
   }
 
   export interface RegisterValues {

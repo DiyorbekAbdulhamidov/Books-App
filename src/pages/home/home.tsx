@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import axios from 'axios';
 import useAuthHeaders from '../../utils/sign';
 import { alert } from '../../utils';
-import { Grid, TextField } from '@mui/material';
+import { Badge, Grid, TextField } from '@mui/material';
 
 interface HomeProps { }
 
@@ -18,9 +18,7 @@ const Home: FunctionComponent<HomeProps> = () => {
   const { authHeadersFirst } = useAuthHeaders();
 
   useEffect(() => {
-    axios.get('https://0001.uz/books', {
-      headers: authHeadersFirst
-    })
+    axios.get('https://0001.uz/books', { headers: authHeadersFirst })
       .then((response) => {
         setData(response.data.data);
         setLoading(false);
@@ -52,9 +50,14 @@ const Home: FunctionComponent<HomeProps> = () => {
         </Grid>
 
         <Card sx={{ marginTop: '20px', width: '397px', height: 'auto', padding: '32px', display: 'flex', flexDirection: 'column', gap: '16px', borderRadius: '12px' }} variant="outlined">
-            <Typography fontSize='16px' fontWeight={600} fontFamily={'Mulish'} color={'#151515'}>Raspberry Pi User Guide</Typography>
-            <Typography fontFamily={'Mulish'} fontWeight={400} lineHeight='150%' fontSize='14px' color={'#333'} >Lorem ipsum dolor sit amet consectetur. Nulla adipiscing neque varius vestibulum magna in. Tortor quisque nisl congue ut tellus sem id.</Typography>
+          <Typography fontSize='16px' fontWeight={600} fontFamily={'Mulish'} color={'#151515'}>Raspberry Pi User Guide</Typography>
+          <Typography fontFamily={'Mulish'} fontWeight={400} lineHeight='150%' fontSize='14px' color={'#333'} >Lorem ipsum dolor sit amet consectetur. Nulla adipiscing neque varius vestibulum magna in. Tortor quisque nisl congue ut tellus sem id.</Typography>
+          <Box display='flex' alignItems='center' justifyContent='space-between'>
+            <Typography fontSize='14px' fontFamily='Mulish' fontWeight={500} color='black' >Eben Upton: 2012-year</Typography>
+            <Badge sx={{width: '100px', padding: '4px 10px', height: '30px', borderRadius: '8.5px' ,bgcolor: '#EFE6FD', color: '#9654F4'}}>159 pages</Badge>
+          </Box>
         </Card>
+
       </Box>
     </>
   );
