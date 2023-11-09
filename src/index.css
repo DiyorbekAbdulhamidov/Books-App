@@ -3,6 +3,7 @@
   margin: 0;
   box-sizing: border-box;
   font-family: Mulish;
+  transition: all 0.2s ease-in-out;
 }
 
 body {

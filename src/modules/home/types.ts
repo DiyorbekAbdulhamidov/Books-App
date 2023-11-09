@@ -7,6 +7,20 @@ export namespace IEntity {
     secret: string
   }
 
+  export interface Isbn {
+    isbn : string
+  }
+
+  export interface Book {
+    author : string,
+    cover : string,
+    id : number,
+    isbn : string,
+    pages : number,
+    published : number,
+    title : string
+  }
+
   export interface UserKey {
     key: string;
   }
