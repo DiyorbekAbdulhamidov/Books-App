@@ -10,7 +10,7 @@ import { alert } from '../../utils';
 import { Badge, Grid, Modal, TextField } from '@mui/material';
 import { IEntity } from '../../modules/home/types';
 
-const style = {
+const modalStyle = {
   width: '430px',
   borderRadius: '12px',
   position: 'absolute' as 'absolute',
@@ -34,12 +34,9 @@ const Home: FunctionComponent<HomeProps> = () => {
 
   const { authHeadersFirst, authHeadersThird } = useAuthHeaders();
 
-  console.log(authHeadersFirst.Sign);
-  
-
   useEffect(() => {
     setLoading(true);
-    axios.get('https://0001.uz/books', { headers: Key: authHeadersFirst. })
+    axios.get('https://0001.uz/books', { headers: authHeadersFirst })
       .then((response) => {
         setData(response.data.data);
         setLoading(false);
@@ -52,11 +49,9 @@ const Home: FunctionComponent<HomeProps> = () => {
 
   const handelCreateBook = () => {
     setLoading(true);
-    const apiUrl = 'https://0001.uz/books';
     const requestData = JSON.stringify({ isbn });
     const headers = authHeadersThird;
-
-    axios.post(apiUrl, requestData, { headers })
+    axios.post('https://0001.uz/books', requestData, { headers })
       .then((response) => {
         setData(response.data.data);
         setLoading(false);
@@ -110,7 +105,7 @@ const Home: FunctionComponent<HomeProps> = () => {
         </Grid>
 
         <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
-          <Box sx={style}>
+          <Box sx={modalStyle}>
             <Box display='flex' alignItems='center' justifyContent='space-between'>
               <Typography fontFamily='Mulish' id="modal-modal-title" variant="h6" component="h2">
                 Create a book
@@ -121,10 +116,11 @@ const Home: FunctionComponent<HomeProps> = () => {
             </Box>
             <TextField onChange={(e) => setIsbn(e.target.value)} variant="standard" type='isbn' placeholder='Enter isbn ...' InputProps={{ disableUnderline: true }} style={{ marginTop: '10px', background: 'white', width: '100%', height: '47px', padding: '10px 16px', border: '1px solid #EBEBEB', borderRadius: '6px', borderColor: 'none' }} />
             <Box display='flex' gap='20px' marginTop='20px'>
-              <Button onClick={() => handleClose} sx={{ width: '200px', bgcolor: 'none', border: 'solid 1px #6200EE', fontSize: '16px', fontFamily: 'Mulish', color: '#6200EE', textTransform: 'none', "&:hover": { background: 'none' } }}>Close</Button>
+              <Button onClick={() => handleClose()} sx={{ width: '200px', bgcolor: 'none', border: 'solid 1px #6200EE', fontSize: '16px', fontFamily: 'Mulish', color: '#6200EE', textTransform: 'none', "&:hover": { background: 'none' } }}>Close</Button>
               <Button onClick={() => { handleOpen(); handelCreateBook(); }} disabled={loading} sx={{ width: '200px', bgcolor: '#6200EE', fontSize: '16px', fontFamily: 'Mulish', color: '#FEFEFE', textTransform: 'none', "&:hover": { background: '#6200EE' } }}>{loading ? 'Loading...' : 'Submit'}</Button></Box>
           </Box>
         </Modal>
+
       </Box>
     </>
   );
