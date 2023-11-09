@@ -25,3 +25,10 @@ export namespace IEntity {
     key: string;
   }
 }
+
+export namespace IContext {
+  export interface BooksContextType {
+    bookData : IEntity.Book[],
+    setBookData : (books : IEntity.Book[]) => void;
+  }
+}

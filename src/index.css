@@ -12,3 +12,13 @@ body {
   background-image: url('../src/assets/images/backroung.svg');
   background-repeat: no-repeat;
 }
+
+.actions {
+  opacity: 0;
+  transition: all 0.2s ease-in-out;
+}
+
+.card:hover .actions {
+  opacity: 1;
+  cursor: pointer;
+}

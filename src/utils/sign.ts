@@ -1,14 +1,19 @@
 import { useAuth } from "../modules/auth/context";
 import md5 from "md5";
 
-const sign = (method: string, url: string, body: string, userSecret: string) => {
-  const stringToSign = `${method}+${url}+${body}+${userSecret}`;
+const sign = (method: string, url: string, body: any, userSecret: string) => {
+  const stringToSign = `${method}${url}${body}${userSecret}`;
   const md5Sign = md5(stringToSign);
   return md5Sign;
 };
 
-const useAuthHeaders = () => {
+interface SignProps {
+  isbn?: string,
+  url?: string
+}
 
+
+const useAuthHeaders = ({ isbn, url }: SignProps) => {
   const { user } = useAuth();
   const Key = user?.key || "";
   const userSecret = user?.secret || "";
@@ -16,22 +21,28 @@ const useAuthHeaders = () => {
   const firstRequest = {
     method: "GET",
     url: "/books",
-    body: JSON.stringify({ "isbn": "9781118464465" }),
+    body: "",
   };
 
   const secondRequest = {
     method: "POST",
     url: "/users",
-    body: JSON.stringify({ "isbn": "9781118464465" }),
+    body: "",
   };
 
   const thirdRequest = {
-    method : "POST",
-    url : "/books",
-    body: JSON.stringify({ "isbn": "9781118464465" }),
+    method: "POST",
+    url: "/books",
+    body: JSON.stringify({ isbn })
   };
 
-   const authHeadersFirst = {
+  const fourthRequest = {
+    method: "GET",
+    url: `/books/${url}`,
+    body: "",
+  }
+
+  const authHeadersFirst = {
     Key,
     Sign: sign(firstRequest.method, firstRequest.url, firstRequest.body, userSecret),
   };
@@ -46,7 +57,12 @@ const useAuthHeaders = () => {
     Sign: sign(thirdRequest.method, thirdRequest.url, thirdRequest.body, userSecret),
   }
 
-  return { authHeadersFirst, authHeadersSecond, authHeadersThird };
+  const authHeadersFourth = {
+    Key,
+    Sign: sign(fourthRequest.method, fourthRequest.url, fourthRequest.body, userSecret)
+  }
+
+  return { authHeadersFirst, authHeadersSecond, authHeadersThird, authHeadersFourth };
 };
 
 export default useAuthHeaders;

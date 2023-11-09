@@ -4,6 +4,7 @@ import { Routes } from "./routes";
 import { AuthProvider } from "./modules/auth/context";
 import "./index.css";
 import "./assets/fonts/mulish.css";
+import { BookProvider } from "./modules/home/context";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -11,7 +12,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <AuthProvider>
+      <BookProvider>
         <Routes />
+      </BookProvider>
     </AuthProvider>
   </React.StrictMode>
 );

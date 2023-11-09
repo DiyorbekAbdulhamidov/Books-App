@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -15,6 +15,10 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { useAuth } from "../../modules/auth/context";
 import { Logout } from '@mui/icons-material';
+import axios from "axios"
+import useAuthHeaders from '../../utils/sign';
+import { useBookData } from '../../modules/home/context';
+import { alert } from '../../utils';
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -158,6 +162,22 @@ export default function PrimaherySearchAppBar() {
     </Menu>
   );
 
+  const [title, setTitle] = React.useState<string>("");
+
+  const { authHeadersFourth } = useAuthHeaders({ url: title });
+
+  const { setBookData } = useBookData();
+
+  useEffect(() => {
+    axios.get(`${title !== "" ? `https://0001.uz/books/${title}` : ''}`, { headers: authHeadersFourth, })
+      .then((response) => {
+        setBookData(response.data.data);
+      })
+      .catch((error: any) => {
+        alert.error(error.response.data.message);
+      });
+  }, [title]);
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar sx={{ padding: "0 70px", background: 'none', boxShadow: 'none' }} position="static">
@@ -168,6 +188,7 @@ export default function PrimaherySearchAppBar() {
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
+              onChange={(e) => setTitle(e.target.value)}
               placeholder="Search ..."
               inputProps={{ 'aria-label': 'search' }}
             />
