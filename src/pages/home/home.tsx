@@ -29,6 +29,7 @@ const Home: FunctionComponent<HomeProps> = () => {
   const { bookData, setBookData } = useBookData();
 
   const [isbn, setIsbn] = useState<any>(null);
+  const [id, setId] = useState<any>(null);
   const [status, setStatus] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = React.useState(false);
@@ -40,7 +41,7 @@ const Home: FunctionComponent<HomeProps> = () => {
   const handleOpenEdit = () => setOpenEdit(true);
   const handleCloseEdit = () => setOpenEdit(false);
 
-  const { authHeadersFirst, authHeadersThird, authHeadersFifth, authHeadersSixth } = useAuthHeaders({ isbn });
+  const { authHeadersFirst, authHeadersThird, authHeadersFifth, authHeadersSixth } = useAuthHeaders({ isbn, id, status });
 
   useEffect(() => {
     axios.get('https://0001.uz/books', { headers: authHeadersFirst })
@@ -76,6 +77,9 @@ const Home: FunctionComponent<HomeProps> = () => {
   };
 
   const handleDeleteBook = (id: number) => {
+    setId(id);
+    console.log('delete id', id);
+
     axios.delete(`https://0001.uz/books/${id}`, { headers: authHeadersFifth })
       .then((response) => {
         alert.success('Successfully deleted!');
@@ -87,10 +91,11 @@ const Home: FunctionComponent<HomeProps> = () => {
   }
 
   const handleEditBook = (id: number, book: IEntity.Book) => {
-    const requestData = JSON.stringify({ book, status });
+    setId(id);
+    const requestData = JSON.stringify({ status });
     axios.patch(`https://0001.uz/books/${id}`, requestData, { headers: authHeadersSixth })
       .then((response) => {
-        alert.success('Successfully deleted!');
+        alert.success('Successfully edited!');
       })
       .catch((error) => {
         alert.error(error.response.data.message);

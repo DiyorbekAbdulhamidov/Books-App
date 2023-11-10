@@ -11,10 +11,13 @@ interface SignProps {
   isbn?: string,
   url?: string
   id? : number
+  status? : string
 }
 
 
-const useAuthHeaders = ({ isbn, url, id }: SignProps) => {
+const useAuthHeaders = ({ isbn, url, id, status }: SignProps) => {
+  console.log('sign id' , id);
+
   const { user } = useAuth();
   const Key = user?.key || "";
   const userSecret = user?.secret || "";
@@ -49,10 +52,10 @@ const useAuthHeaders = ({ isbn, url, id }: SignProps) => {
     body: "",
   }
 
-  const sixthRequest = {
+  const sixthRequest = { 
     method: "PATCH",
     url: `/books/${id}`,
-    body: "",
+    body: JSON.stringify({ status })
   }
 
   const authHeadersFirst = {
