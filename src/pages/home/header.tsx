@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { } from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -19,7 +19,6 @@ import axios from "axios"
 import useAuthHeaders from '../../utils/sign';
 import { useBookData } from '../../modules/home/context';
 import { alert } from '../../utils';
-
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -166,17 +165,28 @@ export default function PrimaherySearchAppBar() {
 
   const { authHeadersFourth } = useAuthHeaders({ url: title });
 
+  const [loading, setLoading] = React.useState(false);
+
   const { setBookData } = useBookData();
 
-  useEffect(() => {
-    axios.get(`${title !== "" ? `https://0001.uz/books/${title}` : ''}`, { headers: authHeadersFourth, })
-      .then((response) => {
-        setBookData(response.data.data);
-      })
-      .catch((error: any) => {
-        alert.error(error.response.data.message);
-      });
-  }, [title]);
+  const handleKeyPress = (e: any) => {
+    if (e.key === 'Enter') {
+      alert.warning('Searching in database please wait...');
+      setLoading(true);
+      if (title.trim() !== "") {
+        axios.get(`https://0001.uz/books/${title}`, { headers: authHeadersFourth })
+          .then((response) => {
+            setBookData(response.data.data);
+            alert.success('All datas')
+            setLoading(false);
+          })
+          .catch((error) => {
+            alert.error(error.response.data.message);
+            setLoading(false);
+          });
+      }
+    }
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -188,9 +198,12 @@ export default function PrimaherySearchAppBar() {
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
+              disabled={loading}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Search ..."
+              onKeyPress={handleKeyPress}
+              placeholder="Search in database ..."
               inputProps={{ 'aria-label': 'search' }}
+              readOnly={loading}
             />
           </Search>
           <Box sx={{ flexGrow: 1 }} />
