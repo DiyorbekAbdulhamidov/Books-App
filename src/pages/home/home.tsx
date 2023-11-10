@@ -28,12 +28,12 @@ interface HomeProps { }
 const Home: FunctionComponent<HomeProps> = () => {
   const { bookData, setBookData } = useBookData();
 
-  const [isbn, setIsbn] = useState<any>(null);
-  const [id, setId] = useState<any>(null);
-  const [status, setStatus] = useState<any>(null);
-  const [loading, setLoading] = useState(false);
-  const [open, setOpen] = React.useState(false);
-  const [openEdit, setOpenEdit] = React.useState(false);
+  const [isbn, setIsbn] = useState<string>("");
+  const [id, setId] = useState<number>(0);
+  const [status, setStatus] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [open, setOpen] = React.useState<boolean>(false);
+  const [openEdit, setOpenEdit] = React.useState<boolean>(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -83,6 +83,7 @@ const Home: FunctionComponent<HomeProps> = () => {
     axios.delete(`https://0001.uz/books/${id}`, { headers: authHeadersFifth })
       .then((response) => {
         alert.success('Successfully deleted!');
+        window.location.reload();
       })
       .catch((error) => {
         alert.error(error.response.data.message);
@@ -90,12 +91,13 @@ const Home: FunctionComponent<HomeProps> = () => {
       });
   }
 
-  const handleEditBook = (id: number, book: IEntity.Book) => {
+  const handleEditBook = (id: number) => {
     setId(id);
     const requestData = JSON.stringify({ status });
     axios.patch(`https://0001.uz/books/${id}`, requestData, { headers: authHeadersSixth })
       .then((response) => {
         alert.success('Successfully edited!');
+        handleClose();
       })
       .catch((error) => {
         alert.error(error.response.data.message);
@@ -160,7 +162,7 @@ const Home: FunctionComponent<HomeProps> = () => {
                     <TextField onChange={(e) => setStatus(e.target.value)} variant="standard" type='number' placeholder='Enter status ...' InputProps={{ disableUnderline: true }} style={{ marginTop: '10px', background: 'white', width: '100%', height: '47px', padding: '10px 16px', border: '1px solid #EBEBEB', borderRadius: '6px', borderColor: 'none' }} />
                     <Box display='flex' gap='20px' marginTop='20px'>
                       <Button onClick={() => handleCloseEdit()} sx={{ width: '200px', bgcolor: 'none', border: 'solid 1px #6200EE', fontSize: '16px', fontFamily: 'Mulish', color: '#6200EE', textTransform: 'none', "&:hover": { background: 'none' } }}>Close</Button>
-                      <Button onClick={() => { handleOpenEdit(); handleEditBook(book.id, book) }} disabled={loading} sx={{ width: '200px', bgcolor: '#6200EE', fontSize: '16px', fontFamily: 'Mulish', color: '#FEFEFE', textTransform: 'none', "&:hover": { background: '#6200EE' } }}>{loading ? 'Loading...' : 'Submit'}</Button></Box>
+                      <Button onClick={() => { handleOpenEdit(); handleEditBook(book.id) }} disabled={loading} sx={{ width: '200px', bgcolor: '#6200EE', fontSize: '16px', fontFamily: 'Mulish', color: '#FEFEFE', textTransform: 'none', "&:hover": { background: '#6200EE' } }}>{loading ? 'Loading...' : 'Submit'}</Button></Box>
                   </Box>
                 </Modal>
               </Grid>
