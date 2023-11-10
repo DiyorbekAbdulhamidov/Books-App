@@ -9,6 +9,7 @@ import useAuthHeaders from '../../utils/sign';
 import { alert } from '../../utils';
 import { Badge, Grid, Modal, TextField } from '@mui/material';
 import { useBookData } from '../../modules/home/context';
+import { IEntity } from '../../modules/home/types';
 
 const modalStyle = {
   width: '430px',
@@ -28,6 +29,7 @@ const Home: FunctionComponent<HomeProps> = () => {
   const { bookData, setBookData } = useBookData();
 
   const [isbn, setIsbn] = useState<any>(null);
+  const [status, setStatus] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
@@ -84,8 +86,9 @@ const Home: FunctionComponent<HomeProps> = () => {
       });
   }
 
-  const handleEditBook = (id: number) => {
-    axios.patch(`https://0001.uz/books/${id}`, { headers: authHeadersSixth })
+  const handleEditBook = (id: number, book: IEntity.Book) => {
+    const requestData = JSON.stringify({ book, status });
+    axios.patch(`https://0001.uz/books/${id}`, requestData, { headers: authHeadersSixth })
       .then((response) => {
         alert.success('Successfully deleted!');
       })
@@ -149,10 +152,10 @@ const Home: FunctionComponent<HomeProps> = () => {
                       </Typography>
                       <svg cursor='pointer' onClick={handleCloseEdit} xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none"><path d="M15 9.5L9 15.5M9 9.5L15 15.5M22 12.5C22 18.0228 17.5228 22.5 12 22.5C6.47715 22.5 2 18.0228 2 12.5C2 6.97715 6.47715 2.5 12 2.5C17.5228 2.5 22 6.97715 22 12.5Z" stroke="#151515" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
                     </Box>
-                    <TextField onChange={(e) => setIsbn(e.target.value)} variant="standard" type='number' placeholder='Enter status ...' InputProps={{ disableUnderline: true }} style={{ marginTop: '10px', background: 'white', width: '100%', height: '47px', padding: '10px 16px', border: '1px solid #EBEBEB', borderRadius: '6px', borderColor: 'none' }} />
+                    <TextField onChange={(e) => setStatus(e.target.value)} variant="standard" type='number' placeholder='Enter status ...' InputProps={{ disableUnderline: true }} style={{ marginTop: '10px', background: 'white', width: '100%', height: '47px', padding: '10px 16px', border: '1px solid #EBEBEB', borderRadius: '6px', borderColor: 'none' }} />
                     <Box display='flex' gap='20px' marginTop='20px'>
                       <Button onClick={() => handleCloseEdit()} sx={{ width: '200px', bgcolor: 'none', border: 'solid 1px #6200EE', fontSize: '16px', fontFamily: 'Mulish', color: '#6200EE', textTransform: 'none', "&:hover": { background: 'none' } }}>Close</Button>
-                      <Button onClick={() => { handleOpenEdit(); handleEditBook(book.id) }} disabled={loading} sx={{ width: '200px', bgcolor: '#6200EE', fontSize: '16px', fontFamily: 'Mulish', color: '#FEFEFE', textTransform: 'none', "&:hover": { background: '#6200EE' } }}>{loading ? 'Loading...' : 'Submit'}</Button></Box>
+                      <Button onClick={() => { handleOpenEdit(); handleEditBook(book.id, book) }} disabled={loading} sx={{ width: '200px', bgcolor: '#6200EE', fontSize: '16px', fontFamily: 'Mulish', color: '#FEFEFE', textTransform: 'none', "&:hover": { background: '#6200EE' } }}>{loading ? 'Loading...' : 'Submit'}</Button></Box>
                   </Box>
                 </Modal>
               </Grid>
