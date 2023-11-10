@@ -10,10 +10,11 @@ const sign = (method: string, url: string, body: any, userSecret: string) => {
 interface SignProps {
   isbn?: string,
   url?: string
+  id? : number
 }
 
 
-const useAuthHeaders = ({ isbn, url }: SignProps) => {
+const useAuthHeaders = ({ isbn, url, id }: SignProps) => {
   const { user } = useAuth();
   const Key = user?.key || "";
   const userSecret = user?.secret || "";
@@ -42,6 +43,18 @@ const useAuthHeaders = ({ isbn, url }: SignProps) => {
     body: "",
   }
 
+  const fifthRequest = {
+    method: "DELETE",
+    url: `/books/${id}`,
+    body: "",
+  }
+
+  const sixthRequest = {
+    method: "PATCH",
+    url: `/books/${id}`,
+    body: "",
+  }
+
   const authHeadersFirst = {
     Key,
     Sign: sign(firstRequest.method, firstRequest.url, firstRequest.body, userSecret),
@@ -62,7 +75,17 @@ const useAuthHeaders = ({ isbn, url }: SignProps) => {
     Sign: sign(fourthRequest.method, fourthRequest.url, fourthRequest.body, userSecret)
   }
 
-  return { authHeadersFirst, authHeadersSecond, authHeadersThird, authHeadersFourth };
+  const authHeadersFifth = {
+    Key,
+    Sign: sign(fifthRequest.method, fifthRequest.url, fifthRequest.body, userSecret)
+  }
+
+  const authHeadersSixth = {
+    Key,
+    Sign: sign(sixthRequest.method, sixthRequest.url, sixthRequest.body, userSecret)
+  }
+
+  return { authHeadersFirst, authHeadersSecond, authHeadersThird, authHeadersFourth, authHeadersFifth, authHeadersSixth };
 };
 
 export default useAuthHeaders;

@@ -8,17 +8,17 @@ export namespace IEntity {
   }
 
   export interface Isbn {
-    isbn : string
+    isbn: string
   }
 
   export interface Book {
-    author : string,
-    cover : string,
-    id : number,
-    isbn : string,
-    pages : number,
-    published : number,
-    title : string
+    author: string,
+    cover: string,
+    id: number,
+    isbn: string,
+    pages: number,
+    published: number,
+    title: string
   }
 
   export interface UserKey {
@@ -28,7 +28,7 @@ export namespace IEntity {
 
 export namespace IContext {
   export interface BooksContextType {
-    bookData : IEntity.Book[],
-    setBookData : (books : IEntity.Book[]) => void;
+    bookData: IEntity.Book[],
+    setBookData: (books: IEntity.Book[] ) => void;
   }
 }
