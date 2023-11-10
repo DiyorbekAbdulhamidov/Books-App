@@ -35,14 +35,14 @@ body {
 
 .grid-scroll::-webkit-scrollbar-track {
   
-  background: white;
+  background: none;
 }
 
 .grid-scroll::-webkit-scrollbar-thumb {
-  background: white;
+  background: none;
   border-radius: 6px;
 }
 
 .grid-scroll::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: none;
 }
